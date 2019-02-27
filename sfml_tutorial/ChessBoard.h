@@ -10,7 +10,7 @@ using std::vector;
 class ChessBoard
 {
 private:
-	int							_boardTileCount = 12;
+	int							_boardTileCount = 4;
 	Vector2i					_startingPosition = Vector2i(3, 2); //starting possition
 	int**						_boardState;
 	vector<RectangleShape>		_tiles;

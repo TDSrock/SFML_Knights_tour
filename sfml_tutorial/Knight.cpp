@@ -3,7 +3,7 @@
 
 void Knight::Initialize(String path, float width, float height, Vector2i startingPos)
 {
-	_speed = 100;
+	_speed = 1000;
 	_arrayPosition = startingPos;
 	_position = Vector2f(startingPos.x * width, startingPos.y * height);
 	SpriteRenderer::Initialize(path, width, height);
@@ -22,7 +22,7 @@ void Knight::Update(Time deltaTime)
 	//if the knight is not where we want him to be
 	if (_goalPosition != _position) {
 		float frameSpeed = _speed * deltaTime.asSeconds();
-		Vector2f delta = _position - _goalPosition;
+		Vector2f delta = _goalPosition - _position;
 		float distance = sqrtf(delta.x * delta.x + delta.y * delta.y);
 		//printf("distance is now %f, closing in with %f speed\n", distance, frameSpeed);
 		if (distance <= frameSpeed) {
@@ -33,9 +33,10 @@ void Knight::Update(Time deltaTime)
 		else {
 			//otherwise keep moving closer
 			Vector2f normal = delta / distance;
-			_position -= frameSpeed * normal;
+			_position += frameSpeed * normal;
 		}
 	}
+	printf("{ %f, %f }\n", _position.x, _position.y);
 }
 
 void Knight::MoveTo(Vector2f goal)
@@ -43,10 +44,10 @@ void Knight::MoveTo(Vector2f goal)
 	_ignoreUpdate = true;
 	_goalPosition = goal;
 	printf("New move to command, moving to: {%f, %f}\n", goal.x, goal.y);
-	printf("That maps to array possitions: {%f, %f}\n", goal.x / _rectangle.getSize().x, goal.y / _rectangle.getSize().y);
+	printf("That maps to array possitions: {%i, %i}\n", static_cast<int>(goal.x / _rectangle.getSize().x), static_cast<int>(goal.y / _rectangle.getSize().y));
 }
 
 bool Knight::IsAtGoal()
 {
-	return _goalPosition == _position;
+	return _goalPosition == _position && !_ignoreUpdate;
 }

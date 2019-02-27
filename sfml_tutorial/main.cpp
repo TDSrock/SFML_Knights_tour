@@ -5,7 +5,7 @@ using namespace sf;
 
 int main()
 {
-	RenderWindow window(VideoMode(512, 512), "SFML Tutorial", Style::Titlebar | Style::Close);
+	RenderWindow window(VideoMode(1024, 1024), "SFML Tutorial", Style::Titlebar | Style::Close);
 	window.setFramerateLimit(60);	
 	std::cout << "Start\n";
 	ChessBoard board(window);
