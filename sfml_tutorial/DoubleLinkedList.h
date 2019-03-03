@@ -27,6 +27,7 @@ public:
 	bool isEmpty();
 	void display();
 	void append(T value);
+	generic_node<T>* GetHead();
 };
 
 template <class T>
@@ -39,6 +40,13 @@ void DoubleLinkedList<T>::display() {
 		std::cout << display_node->data << "\t";
 		display_node = display_node->next;
 	}
+	std::cout << "\n";
+}
+
+template<class T>
+inline generic_node<T>* DoubleLinkedList<T>::GetHead()
+{
+	return head;
 }
 
 template <class T>

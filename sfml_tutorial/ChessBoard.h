@@ -19,6 +19,7 @@ private:
 	Clock							_deltaClock;
 	Uint32							_width, _height;
 	KnightsTourSolver				_solver;
+	generic_node<Vector2i>*			_currentGoalNode = NULL;
 	void PrintBoardState(int** _state);
 	void Update();
 	void LateUpdate();

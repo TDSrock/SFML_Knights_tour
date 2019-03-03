@@ -14,9 +14,13 @@ ChessBoard::ChessBoard(RenderWindow &window)
 
 	_sprites.emplace_back(&_knightRenderer);
 	InitializeTiles(_width, _height);
-	if (_solver.SolveRecursive(_startingPosition, _boardTileCount, _boardTileCount))
+	//if (_solver.SolveFunctionWarnsdorff(_startingPosition, _boardTileCount, _boardTileCount)) {//currently not working.
+	if (_solver.SolveRecursiveBruteForce(_startingPosition, _boardTileCount, _boardTileCount)) {
 		PrintBoardState(_solver._board);
-	_solver._linkedList.display();
+		_solver._linkedList.display();
+		_currentGoalNode = _solver._linkedList.GetHead();
+	}
+
 	while (window.isOpen())
 	{
 		Event event;
@@ -65,7 +69,7 @@ void ChessBoard::PrintBoardState(int ** _state)
 	for (int x = 0; x < _boardTileCount;x++) {
 		cout << "| ";
 		for (int y = 0; y < _boardTileCount;y++)
-			cout << setw(digits) << setfill('0') << _state[x][y] << " | ";
+			cout << setw(digits) << setfill('0') << _state[y][x] << " | ";
 		cout << "\n ";
 		for (int i = 0; i < _boardTileCount * digits + 2; i++)
 		{
@@ -87,9 +91,17 @@ void ChessBoard::Update()
 
 void ChessBoard::LateUpdate() {
 	if (_knightRenderer.IsAtGoal()) {
-		sleep(sf::seconds(0.5f));
-		//send the knight to his next position
-		_knightRenderer.MoveTo(Vector2f((rand() % (_boardTileCount)) * _width, (rand() % (_boardTileCount)) * _height));
+		if (_currentGoalNode != NULL) {
+			//send the knight to his next position
+			if (_currentGoalNode->next != NULL) {
+				_currentGoalNode = _currentGoalNode->next;
+			}
+			else {
+				printf("Tour complete, going back to intial node\n");
+				_currentGoalNode = _solver._linkedList.GetHead();
+			}
+			_knightRenderer.MoveTo(Vector2f(_currentGoalNode->data.x * _width, _currentGoalNode->data.y * _height));
+		}
 	}
 }
 

@@ -3,7 +3,7 @@
 
 void Knight::Initialize(String path, float width, float height, Vector2i startingPos)
 {
-	_speed = 100;
+	_speed = 500 / width * height;
 	_arrayPosition = startingPos;
 	_position = Vector2f(startingPos.x * width, startingPos.y * height);
 	SpriteRenderer::Initialize(path, width, height);
@@ -14,8 +14,8 @@ void Knight::Update(Time deltaTime)
 {
 	//call the base class's Update function
 	SpriteRenderer::Update(deltaTime);
-	if (_ignoreUpdate) {
-		_ignoreUpdate = false;
+	if (_ignoreUpdateSeconds >= 0) {
+		_ignoreUpdateSeconds-= deltaTime.asSeconds();
 		return;
 	}
 	//update the knight's position
@@ -27,10 +27,10 @@ void Knight::Update(Time deltaTime)
 		//printf("distance is now %f, closing in with %f speed\n", distance, frameSpeed);
 		if (distance <= frameSpeed) {
 			//if our speed would get us there, set us there
-			printf("Reached destination\n\n");
+			//printf("Reached destination\n\n");
 			_position = _goalPosition;
-			printf("Ne: {%f, %f}\n", _goalPosition.x, _goalPosition.y);
-			printf("Neo: {%f, %f}\n", _position.x, _position.y);
+			//printf("Ne: {%f, %f}\n", _goalPosition.x, _goalPosition.y);
+			//printf("Neo: {%f, %f}\n", _position.x, _position.y);
 		}
 		else {
 			//otherwise keep moving closer
@@ -42,7 +42,7 @@ void Knight::Update(Time deltaTime)
 
 void Knight::MoveTo(Vector2f goal)
 {
-	_ignoreUpdate = true;
+	_ignoreUpdateSeconds = 0.5f;
 	_goalPosition = goal;
 	printf("New move to command, moving to: {%f, %f}\n", goal.x, goal.y);
 	printf("That maps to array possitions: {%i, %i}\n", static_cast<int>(goal.x / _rectangle.getSize().x), static_cast<int>(goal.y / _rectangle.getSize().y));
@@ -50,5 +50,6 @@ void Knight::MoveTo(Vector2f goal)
 
 bool Knight::IsAtGoal()
 {
-	return _goalPosition == _position && !_ignoreUpdate;
+	return _goalPosition == _position;
 }
+

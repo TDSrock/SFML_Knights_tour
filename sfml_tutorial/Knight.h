@@ -6,7 +6,7 @@
 	class Knight : public SpriteRenderer
 	{
 	private:
-		bool _ignoreUpdate = false;//used to skip the first update after a move command(and thus to skip the sleeps deltatime)
+		float _ignoreUpdateSeconds = 0;//used to keep the knight standing still for a bit
 	public:
 		Vector2i _arrayPosition;
 		Vector2f _goalPosition;
