@@ -3,6 +3,7 @@
 
 #include <SFML\Graphics.hpp>
 #include "Knight.h"
+#include "KnightsTourSolver.h"
 
 using namespace sf;
 using std::vector;
@@ -10,16 +11,17 @@ using std::vector;
 class ChessBoard
 {
 private:
-	int							_boardTileCount = 4;
-	Vector2i					_startingPosition = Vector2i(3, 2); //starting possition
-	int**						_boardState;
-	vector<RectangleShape>		_tiles;
-	vector<SpriteRenderer*>		_sprites;
-	Knight						_knightRenderer;
-	Clock						_deltaClock;
-	Uint32						_width, _height;
+	int								_boardTileCount = 6;//tiles in both dimensions
+	Vector2i						_startingPosition = Vector2i(0, 0); //starting possition for knights tour solving
+	vector<RectangleShape>			_tiles;
+	vector<SpriteRenderer*>			_sprites;
+	Knight							_knightRenderer;
+	Clock							_deltaClock;
+	Uint32							_width, _height;
+	KnightsTourSolver				_solver;
 	void PrintBoardState(int** _state);
 	void Update();
+	void LateUpdate();
 	void InitializeTiles(int w, int h);
 	void Draw(RenderWindow &window);
 	void DrawChessBoard(RenderWindow &window);

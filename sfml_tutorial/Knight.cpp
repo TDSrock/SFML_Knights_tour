@@ -3,7 +3,7 @@
 
 void Knight::Initialize(String path, float width, float height, Vector2i startingPos)
 {
-	_speed = 1000;
+	_speed = 100;
 	_arrayPosition = startingPos;
 	_position = Vector2f(startingPos.x * width, startingPos.y * height);
 	SpriteRenderer::Initialize(path, width, height);
@@ -29,6 +29,8 @@ void Knight::Update(Time deltaTime)
 			//if our speed would get us there, set us there
 			printf("Reached destination\n\n");
 			_position = _goalPosition;
+			printf("Ne: {%f, %f}\n", _goalPosition.x, _goalPosition.y);
+			printf("Neo: {%f, %f}\n", _position.x, _position.y);
 		}
 		else {
 			//otherwise keep moving closer
@@ -36,7 +38,6 @@ void Knight::Update(Time deltaTime)
 			_position += frameSpeed * normal;
 		}
 	}
-	printf("{ %f, %f }\n", _position.x, _position.y);
 }
 
 void Knight::MoveTo(Vector2f goal)

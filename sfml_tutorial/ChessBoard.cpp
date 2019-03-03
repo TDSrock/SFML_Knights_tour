@@ -1,18 +1,22 @@
 #include "ChessBoard.h";
 #include "Possition.h";
 #include <cstdlib>;
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 ChessBoard::ChessBoard(RenderWindow &window)
 {
-	
-
 	_width = window.getSize().x / _boardTileCount; 
 	_height = window.getSize().y / _boardTileCount;
 	_knightRenderer.Initialize("Textures/Knight.png", _width, _height, _startingPosition);
 
 	_sprites.emplace_back(&_knightRenderer);
 	InitializeTiles(_width, _height);
-
+	if (_solver.SolveRecursive(_startingPosition, _boardTileCount, _boardTileCount))
+		PrintBoardState(_solver._board);
+	_solver._linkedList.display();
 	while (window.isOpen())
 	{
 		Event event;
@@ -24,22 +28,18 @@ ChessBoard::ChessBoard(RenderWindow &window)
 		window.clear(Color(255, 255, 255, 255));
 		Update();
 		Draw(window);
+		LateUpdate();
 		window.display();
 	}
 }
 
 void ChessBoard::InitializeTiles(int width, int height)
 {
-	_boardState = new int*[_boardTileCount];
 	
 	for (int x = 0; x < _boardTileCount; x++)
 	{
-		_boardState[x] = new int[_boardTileCount];
 		for (int y = 0; y < _boardTileCount; y++)
 		{
-			//setup the boardstate intialy for each index to -1
-			_boardState[x][y] = -1;
-
 			RectangleShape tile(Vector2f(width, height));
 			tile.setPosition(x * width, y * height);
 
@@ -53,12 +53,25 @@ void ChessBoard::InitializeTiles(int width, int height)
 
 void ChessBoard::PrintBoardState(int ** _state)
 {
-	for (size_t i = 0; i < _boardTileCount; i++)
+	int number = _boardTileCount * _boardTileCount;
+	int digits = 0; 
+	do { number /= 10; digits++; } while (number != 0);
+	cout << "\n ";
+	for (int i = 0; i < _boardTileCount * digits + 2; i++)
 	{
-		for (size_t j = 0; j < _boardTileCount; j++)
+		cout << "- ";
+	}
+	cout << "\n";
+	for (int x = 0; x < _boardTileCount;x++) {
+		cout << "| ";
+		for (int y = 0; y < _boardTileCount;y++)
+			cout << setw(digits) << setfill('0') << _state[x][y] << " | ";
+		cout << "\n ";
+		for (int i = 0; i < _boardTileCount * digits + 2; i++)
 		{
-
+			cout << "- ";
 		}
+		cout << "\n";
 	}
 }
 
@@ -70,8 +83,12 @@ void ChessBoard::Update()
 	{
 		(*it)->Update(deltatime);
 	}
+}
+
+void ChessBoard::LateUpdate() {
 	if (_knightRenderer.IsAtGoal()) {
 		sleep(sf::seconds(0.5f));
+		//send the knight to his next position
 		_knightRenderer.MoveTo(Vector2f((rand() % (_boardTileCount)) * _width, (rand() % (_boardTileCount)) * _height));
 	}
 }
