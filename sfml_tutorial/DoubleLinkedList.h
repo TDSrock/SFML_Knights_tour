@@ -6,8 +6,8 @@ template <class T>
 struct generic_node {
 	T data;
 
-	struct generic_node *next = NULL;
-	struct generic_node *prev = NULL;
+	generic_node *next = NULL;
+	generic_node *prev = NULL;
 };
 
 template <class T>
@@ -20,8 +20,8 @@ private:
 public:
 
 	DoubleLinkedList<T>() {
-		head = NULL;
-		tail = NULL;
+		head;
+		tail;
 	};
 
 	bool isEmpty();

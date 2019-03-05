@@ -3,7 +3,7 @@
 
 void Knight::Initialize(String path, float width, float height, Vector2i startingPos)
 {
-	_speed = 500 / width * height;
+	_speed = 500 / width * height;//speed is relative to the size of the knight
 	_arrayPosition = startingPos;
 	_position = Vector2f(startingPos.x * width, startingPos.y * height);
 	SpriteRenderer::Initialize(path, width, height);

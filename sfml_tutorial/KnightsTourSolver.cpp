@@ -11,7 +11,7 @@ int KnightsTourSolver::GetDegree(Vector2i location, int width, int height, int *
 {
 	Vector2i testPos;
 	int count = 0;
-	for (int i = 0; i < POSSIBLE_MOVES; ++i)
+	for (int i = 0; i < POSSIBLE_MOVES; i++)
 		testPos = Vector2i(location.x + _moves[i].x, location.y + _moves[i].y);
 		if (IsSafe(testPos, width, height, board))
 			count++;
@@ -167,7 +167,6 @@ bool KnightsTourSolver::SolveFunctionWarnsdorff(Vector2i startingPoint, int widt
 KnightsTourSolver::KnightsTourSolver()
 {
 }
-
 
 KnightsTourSolver::~KnightsTourSolver()
 {
